@@ -30,39 +30,14 @@ apt -y install software-properties-common
 apt -y install nodejs
 apt -y install npm
 apt -y install minicom
+apt -y install gcc-arm-none-eabi
+apt -y install libnewlib-arm-none-eabi
 EOF
 
 # install global gitignore
 
-cat << 'EOF' > ~/.gitignore_global
-# OS generated files #
-######################
-.DS_Store
-ehthumbs.db
-Icon?
-Thumbs.db
+cp ~/iot49/pi/bin/gitignore_global ~/.gitignore_global
 
-# Direnv #
-##########
-.direnv
-.envrc
-
-# Misc #
-########
-.vscode
-.ipynb_checkpoints*
-*gitignore*
-*tmp
-*mpy
-__pycache__/
-*.py[cod]
-*$py.class
-
-# Syncthing #
-#############
-.sync*
-*sync-conflict-*
-EOF
 
 # enable .gitignore_global
 git config --global core.excludesfile ~/.gitignore_global
@@ -94,7 +69,7 @@ eval "$(direnv export bash)"
 pip3 install setuptools
 pip3 install -U pip
 
-cat ~/iot49/pi/install/requirements.txt | xargs -n 1 pip3 install
+cat ~/iot49/pi/bin/requirements.txt | xargs -n 1 pip3 install
 
 # enable bluetooth access for the pi user
 sudo usermod -a -G bluetooth $USER
