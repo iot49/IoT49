@@ -1,0 +1,10 @@
+MQTT throughput, broker iot.eclipse.org:   2.3730 msg/s (N=100)
+MQTT throughput, broker dev.home:         11.3020 msg/s (N=100)
+
+Messenger throughput:                      3.9661 msg/s (N=100)
+
+
+Conclusion:
+With a close broker, MQTT is much more than 2x faster than Messenger
+--> no point to bother with messenger
+--> setup good mqtt broker, close to home!
