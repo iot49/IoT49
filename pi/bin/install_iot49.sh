@@ -3,35 +3,36 @@
 # install iot49 jupyter enviroment for MicroPython
 
 sudo -s -- <<'EOF'
-apt update
-apt -y full-upgrade
+apt-get update
+apt-get -y full-upgrade
 
-apt -y install git
-apt -y install python3-pip
-apt -y install python3-venv
-apt -y install direnv
+apt-get -y install git
+apt-get -y install python3-pip
+apt-get -y install python3-venv
+apt-get -y install direnv
 
-apt -y install libxml2-dev libxslt-dev
-apt -y install libblas-dev liblapack-dev
-apt -y install libatlas-base-dev gfortran
-apt -y install libtiff5-dev libjpeg62-turbo-dev
-apt -y install zlib1g-dev libfreetype6-dev liblcms2-dev
-apt -y install libwebp-dev tcl8.5-dev tk8.5-dev
-apt -y install libharfbuzz-dev libfribidi-dev
-apt -y install libhdf5-dev
-apt -y install libnetcdf-dev
-apt -y install libzmq3-dev
-apt -y install pandoc
-apt -y install texlive-xetex
-apt -y install latexmk
-apt -y install sqlite3
-apt -y install dfu-util
-apt -y install software-properties-common
-apt -y install nodejs
-apt -y install npm
-apt -y install minicom
-apt -y install gcc-arm-none-eabi
-apt -y install libnewlib-arm-none-eabi
+apt-get -y install libxml2-dev libxslt-dev
+apt-get -y install libblas-dev liblapack-dev
+apt-get -y install libatlas-base-dev gfortran
+apt-get -y install libtiff5-dev libjpeg62-turbo-dev
+apt-get -y install zlib1g-dev libfreetype6-dev liblcms2-dev
+apt-get -y install libwebp-dev tcl8.5-dev tk8.5-dev
+apt-get -y install libharfbuzz-dev libfribidi-dev
+apt-get -y install libhdf5-dev
+apt-get -y install libnetcdf-dev
+apt-get -y install libzmq3-dev
+apt-get -y install pandoc
+apt-get -y install texlive-xetex
+apt-get -y install latexmk
+apt-get -y install sqlite3
+apt-get -y install dfu-util
+apt-get -y install software-properties-common
+apt-get -y install nodejs
+apt-get -y install npm
+apt-get -y install minicom
+apt-get -y install libffi-dev
+apt-get -y install libnewlib-arm-none-eabi
+apt-get -y install gcc-arm-none-eabi
 EOF
 
 # install global gitignore
