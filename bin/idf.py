@@ -1,34 +1,22 @@
 #!/bin/bash
 # idf.py
 
-# assumes we are in micropython/ports/XXX
+# we assume we are in ports/esp32
 mp_root="../.."
-mpy_cross_dir="$mp_root/mpy-cross"
-mpy_cross_name="ubuntu-mpy-cross"
-
-# use custom image if on arm
-# Note: check https://hub.docker.com/r/espressif/idf/tags for available versions (Tags)
-image="espressif/idf:release-v4.2"
-if [ "$(uname -m)" == "armv7l" ]; then
-    image="esp-idf-arm7:v4.2"
-fi
+mpy_cross="mpy-cross-ubuntu"
 
 # build mpy-cross for Ubuntu
-if [ ! -f "$mpy_cross_dir/$mpy_cross_name" ]; then
-    echo building "$mpy_cross_dir/$mpy_cross_name"
-    rm -rf "$mpy_cross_dir/build"
-    docker run --rm \
-        -v "$mp_dir":/mp -w /mp/mpy-cross \
-        "$image" make PROG="$mpy_cross_name"
+if [ ! -f "$mp_root/mpy-cross/$mpy_cross" ]; then
+    echo building "$mp_root/mpy-cross/$mpy_cross"
+    cd "$mp_root/mpy-cross"
+    make PROG="$mpy_cross"
+    cd -
 fi
 
-# delegate idf.py to docker
-# Note: set --device and/or --pivileged to enable flashing
-docker run --rm \
-    -e MICROPY_MPYCROSS="/mp/mpy-cross/$mpy_cross_name" \
-    -v $(realpath "$mp_root"):/mp -w /mp/ports/esp32 \
-    "$image" idf.py "$@"
+# and use it
+export MICROPY_MPYCROSS="$mp_root/mpy-cross/$mpy_cross"
 
-# debugging helper ...
-# bash propmt in the idf docker
-# docker run -it -v $IOT/micropython:/mp -w /mp/ports/esp32 "espressif/idf:release-v4.2"
+# delegate idf.py to docker
+# Note 1: check https://hub.docker.com/r/espressif/idf/tags for available versions (Tags)
+# Note 2: also set --device and/or --pivileged to enable flashing
+docker run --rm -v $(realpath "$mp_root"):/mp -w /mp/ports/esp32 "espressif/idf:release-v4.2" idf.py "$@"

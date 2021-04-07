@@ -8,7 +8,8 @@ apt-get -y full-upgrade
 
 apt-get -y install git
 apt-get -y install python3-pip
-apt-get -y install python3-venv
+apt-get -y install python3-dev
+apt-get -y install python3-gpiozero
 apt-get -y install direnv
 
 apt-get -y install libxml2-dev libxslt-dev
@@ -27,20 +28,23 @@ apt-get -y install latexmk
 apt-get -y install sqlite3
 apt-get -y install dfu-util
 apt-get -y install software-properties-common
-apt-get -y install nodejs
 apt-get -y install npm
 apt-get -y install minicom
 apt-get -y install libffi-dev
 apt-get -y install libnewlib-arm-none-eabi
 apt-get -y install gcc-arm-none-eabi
+
+# ruby
+gem install bundler
+
+# nodejs: https://github.com/nodesource/distributions/blob/master/README.md#debinstall
+cd /tmp
+curl -fsSL https://deb.nodesource.com/setup_15.x | sudo -E bash -
+apt-get install -y nodejs
 EOF
 
-# install global gitignore
-
+# install & enable global gitignore
 cp ~/iot49/pi/bin/gitignore_global ~/.gitignore_global
-
-
-# enable .gitignore_global
 git config --global core.excludesfile ~/.gitignore_global
 
 ######################################################################################
@@ -89,7 +93,7 @@ arr+=(["$app.ip"]="$app.ip ='*'")
 arr+=(["$app.port"]="$app.port = 8888")
 arr+=(["c.NotebookApp.enable_mathjax"]="c.NotebookApp.enable_mathjax = True")
 arr+=(["$app.root_dir"]="$app.root_dir = '/home/pi/iot49'")
-arr+=(["$app.password"]="$app.password = 'sha1:5815fb7ca805:f09ed218dfcc908acb3e29c3b697079fea37486a'")
+# arr+=(["$app.password"]="$app.password = 'sha1:5815fb7ca805:f09ed218dfcc908acb3e29c3b697079fea37486a'")
 arr+=(["$app.allow_remote_access"]="$app.allow_remote_access = True")
 
 # apply changes to jupyter_notebook_config.py
@@ -146,3 +150,5 @@ TWO
 sudo systemctl daemon-reload
 sudo systemctl start jupyter
 sudo systemctl enable jupyter
+
+# sudo systemctl restart jupyter && journalctl -fexu jupyter
