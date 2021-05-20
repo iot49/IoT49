@@ -1,0 +1,1 @@
+import deepsleep_power
