@@ -1,0 +1,13 @@
+jupyterlab
+iot-kernel
+ipywidgets
+numpy
+pandas
+matplotlib
+jupyter-bokeh
+scipy
+sympy
+
+gpiozero
+bleak
+esptool

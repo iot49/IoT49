@@ -1,0 +1,7 @@
+FROM ghcr.io/linuxserver/code-server
+
+RUN install_packages cifs-utils
+
+COPY ./start.sh /root/start.sh
+
+CMD [ "/bin/bash", "/root/start.sh" ]

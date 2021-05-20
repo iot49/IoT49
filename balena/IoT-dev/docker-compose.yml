@@ -1,0 +1,75 @@
+version: '2'
+
+volumes:
+    iot-data:
+    code-server-config:
+    duplicati-config:
+
+services:
+
+    jupyter:
+        build: ./jupyter
+        restart: unless-stopped
+        privileged: true
+        network_mode: host
+        labels:
+            io.balena.features.dbus: 1
+            io.balena.features.supervisor-api: 1
+        volumes:
+            - iot-data:/iot
+        ports:
+            - 8888:8888
+
+    gcc:
+        build: ./gcc
+        restart: unless-stopped
+        privileged: true
+        volumes:
+            - iot-data:/iot
+
+    # https://hub.docker.com/r/linuxserver/code-server
+    # https://www.digitalocean.com/community/tutorials/how-to-set-up-the-code-server-cloud-ide-platform-on-ubuntu-18-04
+    vsc:
+        image: ghcr.io/linuxserver/code-server
+        restart: unless-stopped
+        privileged: true
+        environment:
+            - PUID=0
+            - PGID=0
+            # - PASSWORD=password #optional
+            # - HASHED_PASSWORD= #optional
+            # - SUDO_PASSWORD=password #optional
+            # - SUDO_PASSWORD_HASH= #optional
+            # - PROXY_DOMAIN=code-server.my.domain #optional
+        volumes:
+            - code-server-config:/config
+            - iot-data:/config/workspace
+        ports:
+            - 8443:8443
+
+    duplicati:
+        build: ./duplicati
+        restart: unless-stopped
+        privileged: true
+        environment:
+            - PUID=0
+            - PGID=0
+            - CLI_ARGS=--webservice-interface=any
+        volumes:
+            - duplicati-config:/config
+            - iot-data:/iot
+        ports:
+            - 8200:8200/tcp
+
+
+    # https://github.com/janvda/balena-samba-rsync
+    # https://forums.balena.io/t/balena-shared-drive-over-the-network/62236/10
+    smb:
+        build: ./smb
+        restart: unless-stopped
+        privileged: true
+        volumes:
+            - iot-data:/iot
+        ports:
+            - "139:139"
+            - "445:445"

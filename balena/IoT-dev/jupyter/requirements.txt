@@ -1,0 +1,4 @@
+jupyterlab
+iot-kernel
+
+gpiozero

@@ -1,0 +1,27 @@
+# https://github.com/balena-io-playground/balena-samba
+FROM balenalib/%%BALENA_ARCH%%-ubuntu:focal-run
+
+RUN install_packages \
+    grep \
+    psmisc \
+    samba \
+    util-linux
+
+RUN addgroup smbgroup
+
+WORKDIR /usr/src
+COPY config config
+COPY scripts scripts
+RUN chmod +x scripts/*
+
+VOLUME ["/etc", \
+    "/var/cache/samba", \
+    "/var/lib/samba", \
+    "/var/log/samba",\
+    "/run/samba"]
+
+ENV CONFIG_DIR=/usr/src/config
+
+EXPOSE 139 445
+
+CMD ["bash", "scripts/start.sh", "--foreground", "--log-stdout", "--no-process-group"]

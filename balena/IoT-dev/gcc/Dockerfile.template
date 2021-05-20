@@ -1,0 +1,35 @@
+FROM balenalib/%%BALENA_MACHINE_NAME%%-python:3.8-build-20210225 as buildstep
+
+# Build pip wheels for non-conda packages
+COPY ./requirements.txt requirements.txt
+RUN pip install wheel \
+ && mkdir /tmp/wheels \
+ && pip wheel -w /tmp/wheels -r requirements.txt
+
+FROM balenalib/%%BALENA_MACHINE_NAME%%-python:3.8-build-20210225
+
+RUN install_packages \
+    git \
+    cifs-utils \
+    openssh-client \
+    build-essential \
+    libffi-dev pkg-config libnewlib-arm-none-eabi gcc-arm-none-eabi \
+    dfu-util
+
+# stm32 serial flasher
+RUN git clone https://git.code.sf.net/p/stm32flash/code stm32flash-code \
+    && cd stm32flash-code \
+    && make install \
+    && cd .. \
+    && rm -rf stm32flash-code
+
+# Copy python wheels built in the previous stage
+COPY --from=buildstep /tmp/wheels /tmp/wheels
+COPY ./requirements.txt requirements.txt
+RUN pip install --no-index --find-links=/tmp/wheels -r requirements.txt \
+ && rm -rf /tmp/wheels && rm requirements.txt
+
+COPY ./start.sh /root/start.sh
+
+WORKDIR /iot
+CMD [ "/bin/bash", "/root/start.sh" ]
